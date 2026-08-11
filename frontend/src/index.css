@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@import "tailwindcss";
+
+/* =========================================================
+   QueryLens AI — Design System v4 (Clean Layout Pass)
+   ========================================================= */
+
+:root {
+  --font-sans: 'Outfit', 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Brand palette */
+  --indigo:   #6366f1;
+  --violet:   #8b5cf6;
+  --purple:   #a855f7;
+  --cyan:     #06b6d4;
+  --emerald:  #10b981;
+  --amber:    #f59e0b;
+  --red:      #ef4444;
+
+  /* Surface layers */
+  --bg:        #040813;
+  --surface-0: #090e1b;
+  --surface-1: #101624;
+  --surface-2: #16202f;
+  --surface-3: #1c2a3e;
+
+  /* Borders */
+  --border-subtle:  rgba(255,255,255,0.04);
+  --border-default: rgba(255,255,255,0.08);
+  --border-hover:   rgba(255,255,255,0.14);
+
+  /* Text */
+  --text-primary:   #f1f3f9;
+  --text-secondary: #8b96ae;
+  --text-muted:     #4f5b73;
+
+  /* Layout */
+  --container-max:  1400px;
+  --container-pad:  clamp(16px, 4vw, 40px);
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  overflow-x: hidden;
+  /* Subtle mesh grid */
+  background-image:
+    radial-gradient(rgba(99,102,241,0.05) 1px, transparent 1px),
+    radial-gradient(rgba(6,182,212,0.025) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Global layout container ── */
+.page-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+
+/* ── Scrollbars ── */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: rgba(9,14,27,0.5); }
+::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--indigo); }
+
+/* ── Keyframes ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(0.75); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes gradientX {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+@keyframes scanner {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  15%  { opacity: 0.8; }
+  85%  { opacity: 0.8; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+@keyframes spinSlow {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Utility animation classes ── */
+.animate-fade-up   { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-fade-in   { animation: fadeIn 0.4s ease both; }
+.animate-spin-slow { animation: spinSlow 2s linear infinite; }
+.animate-pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
+.animate-float     { animation: float 4s ease-in-out infinite; }
+
+/* ── Glass card ── */
+.card-premium {
+  background: rgba(16, 22, 36, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-default);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.card-premium::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  pointer-events: none;
+}
+.card-premium:hover {
+  border-color: rgba(99,102,241,0.22);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(99,102,241,0.08);
+}
+
+/* ── Gradient headline text ── */
+.gradient-text-indigo {
+  background: linear-gradient(135deg, #a5b4fc 0%, #c084fc 45%, #67e8f9 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradientX 5s ease infinite;
+}
+
+/* ── AI scanline ── */
+.scanline {
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--cyan) 40%, var(--indigo) 60%, transparent 100%);
+  opacity: 0.5;
+  animation: scanner 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── Code block ── */
+.code-block {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.75;
+  color: #a5b4fc;
+}
+
+/* ── Stage connector (PipelineStatus) ── */
+.stage-line {
+  height: 2px; flex: 1;
+  background: var(--surface-3);
+  transition: background 0.4s ease;
+}
+.stage-line.active { background: linear-gradient(90deg, var(--indigo), var(--surface-3)); }
+.stage-line.done   { background: linear-gradient(90deg, var(--emerald), var(--indigo)); }
