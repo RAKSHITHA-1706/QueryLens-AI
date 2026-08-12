@@ -25,7 +25,7 @@
 
 > **📺 Watch QueryLens AI in action:**
 >
-> **[▶️ Click here to watch the Demo Video](PASTE_GOOGLE_DRIVE_LINK_HERE)**
+> **https://drive.google.com/file/d/1bqhfWshxfnCNt0juu7wvoBSEva3TpbLv/view?usp=sharing**
 >
 > *See natural language queries transform into SQL, execute against a live database, and render as charts — all in seconds.*
 
@@ -238,23 +238,6 @@ querylens-ai/
 |---|---|
 | **SQLite** | Embedded relational database |
 
----
-
-## 📸 Screenshots
-
-### Home Dashboard
-> *(Add Screenshot)*
-
-### Query Results
-> *(Add Screenshot)*
-
-### AI Insights
-> *(Add Screenshot)*
-
-### Data Visualization
-> *(Add Screenshot)*
-
----
 
 ## 🔌 API Endpoints
 
