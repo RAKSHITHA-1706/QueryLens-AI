@@ -529,28 +529,14 @@ Which category has the most products?
 
 ---
 
-## 🏆 Hackathon
+## 👥 Team — The Unspeakables
 
-<div align="center">
-
-| | |
-|---|---|
-| **Event** | iTech AI Innovation Hackathon 2026 |
-| **Institution** | Sri Sairam Engineering College |
-| **Team** | SwiftTech |
-
-</div>
-
----
-
-## 👥 Team — SwiftTech
-
-| Name | Role |
-|---|---|
-| *(Team Member 1)* | *(Role)* |
-| *(Team Member 2)* | *(Role)* |
-| *(Team Member 3)* | *(Role)* |
-| *(Team Member 4)* | *(Role)* |
+| Name 
+|---
+| *Sudharson Manikandan R* 
+| *Blessed Samueles N G*
+| *Rakshitha V* 
+| *Aruna Priya R S* 
 
 ---
 
@@ -582,6 +568,6 @@ QueryLens AI exists to make **database intelligence universally accessible**. In
 
 <div align="center">
 
-Built with ❤️ by **Team SwiftTech** · Sri Sairam Engineering College · iTech AI Innovation Hackathon 2026
+Built with ❤️ by **Team The Unspeakables** · Sri Sairam Engineering College · Department of Information Technology
 
 </div>
