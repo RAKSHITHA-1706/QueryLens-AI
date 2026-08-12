@@ -15,10 +15,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 class Settings(BaseSettings):
-    # Local LLM (Ollama)
-    ollama_base_url: str = "http://localhost:11434"
-    ollama_model: str = "qwen2.5:1.5b"
-    
+    # Google Gemini API
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-flash-latest"
+
     # Query Execution Limits
     max_query_rows: int = 500
 

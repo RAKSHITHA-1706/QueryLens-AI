@@ -1,10 +1,18 @@
+"""
+QueryLens AI — SQL Correction Service
+
+Corrects a failed SQL query using Google Gemini, given the original question,
+the failed SQL, and the database error message.
+"""
+
 import logging
-import httpx
 from sqlalchemy import inspect
+
 from app.database.connection import engine
-from app.config import get_settings
+from app.services import gemini_service
 
 logger = logging.getLogger(__name__)
+
 
 def get_database_schema() -> str:
     try:
@@ -21,10 +29,10 @@ def get_database_schema() -> str:
         logger.error(f"Error inspecting schema for correction: {e}")
         return ""
 
+
 def correct_sql(question: str, sql: str, error: str) -> str:
-    settings = get_settings()
     schema_str = get_database_schema()
-    
+
     prompt = f"""You are a SQL correction assistant.
 The following SQL query failed to execute.
 Fix the SQL query based on the database error and the schema.
@@ -43,23 +51,9 @@ Database error:
 
 Return ONLY the corrected SQL query. No markdown. No explanation. No comments."""
 
-    payload = {
-        "model": settings.ollama_model,
-        "prompt": prompt,
-        "stream": False
-    }
-
     try:
-        response = httpx.post(
-            f"{settings.ollama_base_url.rstrip('/')}/api/generate",
-            json=payload,
-            timeout=30.0
-        )
-        response.raise_for_status()
-        
-        response_data = response.json()
-        content = response_data.get("response", "").strip()
-        
+        content = gemini_service.generate_text(prompt)
+
         # Strip markdown fences if present
         if content.startswith("```sql"):
             content = content[6:]
@@ -67,8 +61,9 @@ Return ONLY the corrected SQL query. No markdown. No explanation. No comments.""
             content = content[3:]
         if content.endswith("```"):
             content = content[:-3]
-            
+
         return content.strip()
+
     except Exception as e:
-        logger.error(f"Error during SQL correction with Ollama: {e}")
+        logger.error(f"Error during SQL correction via Gemini: {e}")
         return ""

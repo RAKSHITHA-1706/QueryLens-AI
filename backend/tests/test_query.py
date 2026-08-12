@@ -94,11 +94,11 @@ def test_empty_result_handled():
 def test_result_truncation_works(monkeypatch):
     # Mock the settings max_query_rows to a low number
     from app.config import Settings, get_settings
-    
+
     settings = get_settings()
     original_max = settings.max_query_rows
     settings.max_query_rows = 2
-    
+
     try:
         # Assuming we have at least 3 categories in seed data
         result = execute_query("SELECT * FROM categories")
@@ -140,42 +140,32 @@ def test_api_query_execute_unsafe_query_rejected():
     assert data["success"] is False
     assert data["error_type"] == "validation_error"
 
-def test_api_query_generate_handles_missing_ollama_gracefully(monkeypatch):
-    # Force Ollama availability check to fail
-    monkeypatch.setattr("app.services.sql_generation_service.check_ollama_availability", lambda url: False)
-    
+def test_api_query_handles_missing_gemini_key_gracefully(monkeypatch):
+    """Missing API key should surface as a structured llm_error, not a 500 crash."""
+    def mock_generate_text(prompt):
+        raise RuntimeError("Invalid or unauthorized Gemini API key.")
+
+    monkeypatch.setattr("app.services.sql_generation_service.gemini_service.generate_text", mock_generate_text)
+
     response = client.post("/api/query/generate", json={"question": "Show top products"})
     assert response.status_code == 400
     data = response.json()
     assert data["success"] is False
-    assert data["error_type"] == "configuration_error"
-    assert "Ollama must be running" in data["message"]
-
-class MockHttpxResponse:
-    def __init__(self, json_data):
-        self._json_data = json_data
-        
-    def json(self):
-        return self._json_data
-        
-    def raise_for_status(self):
-        pass
-
-def mock_httpx_post(url, **kwargs):
-    json_str = '{"sql": "SELECT * FROM customers LIMIT 5", "explanation": "Returns top 5 customers"}'
-    return MockHttpxResponse({"response": json_str})
+    assert data["error_type"] == "llm_error"
 
 def test_api_query_handles_input_and_orchestration(monkeypatch):
-    # Mock Ollama availability
-    monkeypatch.setattr("app.services.sql_generation_service.check_ollama_availability", lambda url: True)
-    
-    # Mock httpx.post for Ollama generate API
-    monkeypatch.setattr("httpx.post", mock_httpx_post)
-    
+    """Full pipeline: mock Gemini to return valid JSON SQL, verify result is wired through."""
+    sql_json = '{"sql": "SELECT * FROM customers LIMIT 5", "explanation": "Returns top 5 customers"}'
+
+    def mock_generate_text(prompt):
+        return sql_json
+
+    monkeypatch.setattr("app.services.sql_generation_service.gemini_service.generate_text", mock_generate_text)
+
     response = client.post("/api/query", json={"question": "Show top 5 customers"})
     assert response.status_code == 200
     data = response.json()
-    
+
     assert data["success"] is True
     assert data["sql"] == "SELECT * FROM customers LIMIT 5"
     assert "rows" in data
